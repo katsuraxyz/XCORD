@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>XCORD</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0c10;
+      --panel: #12141a;
+      --panel-2: #171920;
+      --border: rgba(255,255,255,.09);
+      --text: #f5f7fb;
+      --muted: #9ba3b2;
+      --accent: #5865f2;
+      --success: #43b581;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      width: 360px;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 100% 0, rgba(88,101,242,.14), transparent 38%),
+        var(--bg);
+    }
+
+    .shell { padding: 18px; }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      box-shadow: 0 7px 20px rgba(0,0,0,.3);
+      flex: 0 0 auto;
+    }
+
+    .title-wrap { min-width: 0; }
+    h1 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -.015em;
+    }
+
+    .subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.35;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 11px;
+      margin-bottom: 12px;
+      background: rgba(67,181,129,.07);
+      border: 1px solid rgba(67,181,129,.18);
+      border-radius: 10px;
+      font-size: 12px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 4px rgba(67,181,129,.10);
+      flex: 0 0 auto;
+    }
+
+    .card {
+      overflow: hidden;
+      background: rgba(18,20,26,.88);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .row:last-child { border-bottom: 0; }
+
+    .row-icon {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--panel-2);
+      color: #dfe3ff;
+      flex: 0 0 auto;
+    }
+
+    .row-icon svg {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .row-title {
+      font-size: 12px;
+      font-weight: 650;
+      margin-bottom: 2px;
+    }
+
+    .row-copy {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .note {
+      margin: 12px 2px 0;
+      color: var(--muted);
+      font-size: 10.5px;
+      line-height: 1.45;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      color: #717988;
+      font-size: 10px;
+    }
+
+    .badge {
+      padding: 3px 6px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.025);
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="header">
+      <img class="logo" src="icons/icon128.png" alt="XCORD logo">
+      <div class="title-wrap">
+        <h1>XCORD</h1>
+        <div class="subtitle">X actions, without leaving Discord.</div>
+      </div>
+    </header>
+
+    <div class="status">
+      <span class="status-dot"></span>
+      <span>Extension is enabled and ready.</span>
+    </div>
+
+    <section class="card">
+      <div class="row">
+        <div class="row-icon">
+          <svg viewBox="0 0 24 24"><path d="M15 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg>
+        </div>
+        <div>
+          <div class="row-title">Follow profiles</div>
+          <div class="row-copy">Profile links get a dedicated Follow button directly inside Discord.</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-icon">
+          <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+        </div>
+        <div>
+          <div class="row-title">Like posts</div>
+          <div class="row-copy">Post links get a separate Like button for one-click interaction.</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="row-icon">
+          <svg viewBox="0 0 24 24"><path d="m17 1 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 23-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        </div>
+        <div>
+          <div class="row-title">Repost separately</div>
+          <div class="row-copy">Repost is its own action, independent from Like.</div>
+        </div>
+      </div>
+    </section>
+
+    <p class="note">Keep X signed in on the same Chrome profile. Actions run in a temporary background tab and close automatically when finished.</p>
+
+    <footer class="footer">
+      <span>X actions for Discord</span>
+      <span class="badge">v1.4.0</span>
+    </footer>
+  </main>
+</body>
+</html>

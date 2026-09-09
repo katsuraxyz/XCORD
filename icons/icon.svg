@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <title>XCORD</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17191f"/>
+      <stop offset="1" stop-color="#090a0d"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#bg)" filter="url(#shadow)"/>
+  <rect x="8.5" y="8.5" width="111" height="111" rx="27.5" fill="none" stroke="#ffffff" stroke-opacity="0.10"/>
+  <path d="M34 31h18.5l16.8 22.4L89 31h10L74.2 60.7 99 97H80.6L62.8 72.9 41 97H31l26.8-31.6L34 31Zm15.1 8 34.6 50h7.1L56.1 39h-7Z" fill="#fff"/>
+  <rect x="45" y="108" width="38" height="5" rx="2.5" fill="#5865F2"/>
+</svg>
