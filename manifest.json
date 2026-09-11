@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "XCORD",
-  "version": "1.4.0",
-  "description": "One-click X actions directly inside Discord. Follow profiles, like posts, and repost without leaving the conversation.",
+  "version": "1.5",
+  "description": "One-click X actions directly inside Discord: follow, like, repost, reply with a random preset, and copy your reply link.",
   "permissions": [
     "tabs",
-    "scripting"
+    "scripting",
+    "storage"
   ],
   "host_permissions": [
     "https://discord.com/*",

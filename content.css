@@ -4,6 +4,7 @@
   --xcord-text: rgba(255, 255, 255, 0.92);
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 5px;
   margin-left: 7px;
   vertical-align: middle;
@@ -30,7 +31,7 @@
   cursor: pointer;
   white-space: nowrap;
   vertical-align: middle;
-  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
 }
 
 .xcord-action-btn:hover:not(:disabled) {
@@ -40,9 +41,7 @@
   transform: translateY(-1px);
 }
 
-.xcord-action-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
+.xcord-action-btn:active:not(:disabled) { transform: translateY(0); }
 
 .xcord-action-btn:focus-visible {
   outline: 2px solid rgba(88, 101, 242, 0.88);
@@ -66,18 +65,15 @@
   stroke-linejoin: round;
 }
 
-.xcord-action-label {
-  display: inline-block;
-}
+.xcord-action-label { display: inline-block; }
 
 .xcord-follow-btn[data-state="idle"] {
   color: #dfe3ff;
   border-color: rgba(88, 101, 242, 0.42);
   background: rgba(88, 101, 242, 0.13);
 }
-
 .xcord-follow-btn[data-state="idle"]:hover {
-  color: #ffffff;
+  color: #fff;
   border-color: rgba(88, 101, 242, 0.72);
   background: rgba(88, 101, 242, 0.22);
 }
@@ -87,9 +83,8 @@
   border-color: rgba(249, 24, 128, 0.34);
   background: rgba(249, 24, 128, 0.09);
 }
-
 .xcord-like-btn[data-state="idle"]:hover {
-  color: #ffffff;
+  color: #fff;
   border-color: rgba(249, 24, 128, 0.62);
   background: rgba(249, 24, 128, 0.17);
 }
@@ -99,11 +94,32 @@
   border-color: rgba(0, 186, 124, 0.34);
   background: rgba(0, 186, 124, 0.09);
 }
-
 .xcord-repost-btn[data-state="idle"]:hover {
-  color: #ffffff;
+  color: #fff;
   border-color: rgba(0, 186, 124, 0.62);
   background: rgba(0, 186, 124, 0.17);
+}
+
+.xcord-raid-btn[data-state="idle"] {
+  color: #ffe0b5;
+  border-color: rgba(240, 178, 50, 0.38);
+  background: rgba(240, 178, 50, 0.10);
+}
+.xcord-raid-btn[data-state="idle"]:hover {
+  color: #fff;
+  border-color: rgba(240, 178, 50, 0.66);
+  background: rgba(240, 178, 50, 0.18);
+}
+
+.xcord-copy-btn[data-state="idle"] {
+  color: #d7e8ff;
+  border-color: rgba(62, 142, 255, 0.36);
+  background: rgba(62, 142, 255, 0.09);
+}
+.xcord-copy-btn[data-state="idle"]:hover {
+  color: #fff;
+  border-color: rgba(62, 142, 255, 0.64);
+  background: rgba(62, 142, 255, 0.17);
 }
 
 .xcord-action-btn[data-state="working"] {
@@ -112,10 +128,15 @@
   opacity: 0.88;
 }
 
-.xcord-spinner circle {
-  opacity: 0.25;
+.xcord-action-btn[data-state="unavailable"] {
+  color: rgba(255, 255, 255, 0.36);
+  border-color: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.025);
+  cursor: not-allowed;
+  opacity: 0.72;
 }
 
+.xcord-spinner circle { opacity: 0.25; }
 .xcord-spinner path {
   animation: xcord-spin 0.75s linear infinite;
   transform-origin: 12px 12px;
@@ -134,9 +155,7 @@
   background: rgba(237, 66, 69, 0.11);
 }
 
-@keyframes xcord-spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes xcord-spin { to { transform: rotate(360deg); } }
 
 @media (prefers-reduced-motion: reduce) {
   .xcord-action-btn { transition: none; }

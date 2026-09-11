@@ -10,6 +10,8 @@
     follow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg>',
     like: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>',
     repost: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m17 1 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 23-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
+    raid: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8M8 13h5"/></svg>',
+    copy: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
     check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>',
     alert: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 2.9 1.8 17a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 2.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>',
     spinner: '<svg class="xcord-spinner" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M21 12a9 9 0 0 0-9-9"/></svg>'
@@ -80,7 +82,7 @@
 
     renderButton(btn, iconName, label);
     btn.title = title;
-    btn.disabled = state === 'working' || state === 'done';
+    btn.disabled = state === 'working' || state === 'done' || state === 'unavailable';
   }
 
   function stopDiscordEvent(event) {
@@ -103,6 +105,7 @@
   function errorLabel(reason, fallback) {
     if (/log.?in|sign.?in|not logged/i.test(reason)) return 'Sign in to X';
     if (/rate|limit/i.test(reason)) return 'Rate limited';
+    if (/preset/i.test(reason)) return 'Add presets';
     return fallback;
   }
 
@@ -119,12 +122,7 @@
       });
 
       if (response?.ok) {
-        setState(
-          btn,
-          'done',
-          `Following @${profile.username}`,
-          response.message || ''
-        );
+        setState(btn, 'done', `Following @${profile.username}`, response.message || '');
         return;
       }
 
@@ -161,12 +159,7 @@
       });
 
       if (response?.ok) {
-        setState(
-          btn,
-          'done',
-          isLike ? 'Liked' : 'Reposted',
-          response.message || ''
-        );
+        setState(btn, 'done', isLike ? 'Liked' : 'Reposted', response.message || '');
         return;
       }
 
@@ -179,6 +172,81 @@
       setState(btn, 'error', isLike ? 'Retry like' : 'Retry repost', reason);
       btn.disabled = false;
       console.error(`[XCORD / ${action}]`, err);
+    }
+  }
+
+  async function runRaid(raidBtn, copyBtn, tweet) {
+    if (raidBtn.dataset.state === 'working' || raidBtn.dataset.state === 'done') return;
+
+    setState(raidBtn, 'working', 'Raiding', 'Posting one randomly selected preset reply on X');
+
+    try {
+      const response = await chrome.runtime.sendMessage({
+        type: 'XCORD_RAID',
+        username: tweet.username,
+        statusId: tweet.statusId,
+        url: tweet.url
+      });
+
+      if (response?.ok) {
+        const presetNote = response.preset ? `Preset used: ${response.preset}` : '';
+        setState(raidBtn, 'done', 'Raided', response.message || presetNote);
+
+        if (response.replyUrl) {
+          copyBtn.dataset.replyUrl = response.replyUrl;
+          setState(copyBtn, 'idle', 'Copy Reply', 'Copy your reply link');
+          copyBtn.disabled = false;
+        } else {
+          setState(copyBtn, 'unavailable', 'No Reply Link', 'Reply was posted, but XCORD could not capture its link.');
+        }
+        return;
+      }
+
+      const reason = response?.error || 'Unknown error';
+      setState(raidBtn, 'error', errorLabel(reason, 'Retry raid'), reason);
+      raidBtn.disabled = false;
+      console.error('[XCORD / Raid]', reason);
+    } catch (err) {
+      const reason = err?.message || String(err);
+      setState(raidBtn, 'error', 'Retry raid', reason);
+      raidBtn.disabled = false;
+      console.error('[XCORD / Raid]', err);
+    }
+  }
+
+  async function copyReply(copyBtn) {
+    const replyUrl = copyBtn.dataset.replyUrl;
+    if (!replyUrl) return;
+
+    try {
+      await navigator.clipboard.writeText(replyUrl);
+      setState(copyBtn, 'done', 'Copied', replyUrl);
+      window.setTimeout(() => {
+        if (!copyBtn.isConnected) return;
+        setState(copyBtn, 'idle', 'Copy Reply', 'Copy your reply link');
+        copyBtn.disabled = false;
+      }, 1100);
+    } catch (err) {
+      const reason = err?.message || 'Could not access the clipboard.';
+      setState(copyBtn, 'error', 'Retry copy', reason);
+      copyBtn.disabled = false;
+    }
+  }
+
+  async function restoreRaidState(raidBtn, copyBtn, tweet) {
+    try {
+      const response = await chrome.runtime.sendMessage({
+        type: 'XCORD_GET_REPLY_LINK',
+        statusId: tweet.statusId
+      });
+
+      if (!response?.url) return;
+      copyBtn.dataset.replyUrl = response.url;
+      setState(raidBtn, 'done', 'Raided', 'A reply link for this post is already saved by XCORD.');
+      setState(copyBtn, 'idle', 'Copy Reply', 'Copy your saved reply link');
+      copyBtn.disabled = false;
+    } catch {
+      // Keep the default state if storage lookup is unavailable.
     }
   }
 
@@ -225,12 +293,18 @@
 
       const likeBtn = makeButton('Like', 'xcord-like-btn', 'Like this post on X without leaving Discord', 'like');
       const repostBtn = makeButton('Repost', 'xcord-repost-btn', 'Repost this post on X without leaving Discord', 'repost');
+      const raidBtn = makeButton('Raid', 'xcord-raid-btn', 'Reply using one randomly selected Raid preset', 'raid');
+      const copyBtn = makeButton('Copy Reply', 'xcord-copy-btn', 'Raid this post first', 'copy');
+      setState(copyBtn, 'unavailable', 'Copy Reply', 'Raid this post first');
 
       wireButton(likeBtn, () => runTweetAction(likeBtn, info, 'like'));
       wireButton(repostBtn, () => runTweetAction(repostBtn, info, 'retweet'));
+      wireButton(raidBtn, () => runRaid(raidBtn, copyBtn, info));
+      wireButton(copyBtn, () => copyReply(copyBtn));
 
-      group.append(likeBtn, repostBtn);
+      group.append(likeBtn, repostBtn, raidBtn, copyBtn);
       anchor.insertAdjacentElement('afterend', group);
+      restoreRaidState(raidBtn, copyBtn, info);
     }
   }
 

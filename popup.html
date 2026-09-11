@@ -6,208 +6,344 @@
   <title>XCORD</title>
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #0b0c10;
-      --panel: #12141a;
-      --panel-2: #171920;
-      --border: rgba(255,255,255,.09);
-      --text: #f5f7fb;
-      --muted: #9ba3b2;
+      --bg: #09090b;
+      --surface: #101014;
+      --surface-2: #141418;
+      --field: #0b0b0e;
+      --line: #2b2b31;
+      --line-strong: #3a3a42;
+      --text: #f4f4f5;
+      --muted: #9a9aa3;
+      --dim: #64646d;
       --accent: #5865f2;
-      --success: #43b581;
+      --accent-hi: #6b76ff;
+      --danger: #fb7185;
     }
 
     * { box-sizing: border-box; }
 
-    body {
-      width: 360px;
+    html, body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 100% 0, rgba(88,101,242,.14), transparent 38%),
-        var(--bg);
+      padding: 0;
+      background: var(--bg);
     }
 
-    .shell { padding: 18px; }
+    body {
+      width: 368px;
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, textarea { font: inherit; }
+
+    .shell {
+      width: 100%;
+      padding: 14px 14px 8px;
+    }
 
     .header {
-      display: flex;
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr);
       align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
+      column-gap: 10px;
+      min-height: 38px;
+      padding-bottom: 6px;
     }
 
     .logo {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      box-shadow: 0 7px 20px rgba(0,0,0,.3);
-      flex: 0 0 auto;
+      width: 38px;
+      height: 38px;
+      display: block;
+      object-fit: cover;
     }
 
-    .title-wrap { min-width: 0; }
-    h1 {
+    .brand-copy { min-width: 0; }
+
+    .brand-name {
       margin: 0;
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: -.015em;
+      color: var(--accent);
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.035em;
     }
 
-    .subtitle {
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 11.5px;
-      line-height: 1.35;
-    }
-
-    .status {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 10px 11px;
-      margin-bottom: 12px;
-      background: rgba(67,181,129,.07);
-      border: 1px solid rgba(67,181,129,.18);
-      border-radius: 10px;
-      font-size: 12px;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 0 4px rgba(67,181,129,.10);
-      flex: 0 0 auto;
-    }
-
-    .card {
-      overflow: hidden;
-      background: rgba(18,20,26,.88);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-
-    .row {
-      display: flex;
-      gap: 10px;
-      padding: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .row:last-child { border-bottom: 0; }
-
-    .row-icon {
-      display: grid;
-      place-items: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: var(--panel-2);
-      color: #dfe3ff;
-      flex: 0 0 auto;
-    }
-
-    .row-icon svg {
-      width: 15px;
-      height: 15px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .row-title {
-      font-size: 12px;
-      font-weight: 650;
-      margin-bottom: 2px;
-    }
-
-    .row-copy {
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.45;
-    }
-
-    .note {
-      margin: 12px 2px 0;
+    .tagline {
+      margin-top: 5px;
       color: var(--muted);
       font-size: 10.5px;
-      line-height: 1.45;
+      line-height: 1.15;
+      white-space: nowrap;
     }
 
-    .footer {
+    .capabilities {
+      margin-top: 10px;
+      height: 32px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+    }
+
+    .capability {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      color: #c8c8cf;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .capability + .capability { border-left: 1px solid var(--line); }
+
+    .section { margin-top: 12px; }
+
+    .preset-panel {
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+    }
+
+    .section-head {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      padding: 6px 8px;
+    }
+
+    .section-title-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .section-index {
+      color: var(--dim);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+
+    .editor {
+      position: relative;
+      margin: 0 7px 7px;
+      border: 1px solid var(--line);
+      background: var(--field);
+    }
+
+    .editor::before,
+    .editor::after {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: -1px;
+      background: var(--accent);
+      pointer-events: none;
+    }
+
+    .editor::before { width: 14px; height: 1px; }
+    .editor::after { width: 1px; height: 14px; }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      min-height: 120px;
+      max-height: 120px;
+      resize: none;
+      display: block;
+      padding: 9px 10px;
+      border: 0;
+      outline: none;
+      color: #e5e5e9;
+      background: transparent;
+      caret-color: var(--accent-hi);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+
+    textarea::placeholder { color: #4f4f57; }
+    textarea::-webkit-scrollbar { width: 6px; }
+    textarea::-webkit-scrollbar-track { background: #0b0b0e; border-left: 1px solid #202026; }
+    textarea::-webkit-scrollbar-thumb { background: #34343b; }
+    textarea::-webkit-scrollbar-thumb:hover { background: #45454e; }
+
+    .editor:focus-within { border-color: #50505a; }
+
+    .meta-row {
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 14px;
-      color: #717988;
-      font-size: 10px;
+      gap: 10px;
     }
 
-    .badge {
-      padding: 3px 6px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: rgba(255,255,255,.025);
+    .random-label {
+      color: var(--dim);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 8px;
+      letter-spacing: .045em;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
+
+    .random-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 72px;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    button {
+      height: 36px;
+      border-radius: 0;
+      cursor: pointer;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 9px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: .055em;
+      text-transform: uppercase;
+      transition: background 100ms ease, border-color 100ms ease, color 100ms ease;
+    }
+
+    button:focus-visible {
+      outline: 1px solid var(--accent-hi);
+      outline-offset: 2px;
+    }
+
+    .primary {
+      color: #fff;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+    }
+
+    .primary:hover {
+      border-color: var(--accent-hi);
+      background: var(--accent-hi);
+    }
+
+    .secondary {
+      color: #b8b8c0;
+      border: 1px solid var(--line-strong);
+      background: var(--surface-2);
+    }
+
+    .secondary:hover {
+      color: var(--text);
+      border-color: #50505a;
+      background: #19191e;
+    }
+
+    .save-status {
+      height: 9px;
+      display: flex;
+      align-items: center;
+      color: #8e8aff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 8px;
+      line-height: 1;
+      letter-spacing: .03em;
+    }
+
+    .save-status.error { color: var(--danger); }
+
+    .footer {
+      margin-top: 0;
+      height: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #56565f;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 7px;
+      line-height: 1;
+      letter-spacing: .055em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .footer-xcord { color: var(--accent); font-weight: 800; }
+    .footer-xkatsura { color: #8b8b94; font-weight: 700; }
+    .footer-year { color: #505058; }
   </style>
 </head>
 <body>
   <main class="shell">
     <header class="header">
-      <img class="logo" src="icons/icon128.png" alt="XCORD logo">
-      <div class="title-wrap">
-        <h1>XCORD</h1>
-        <div class="subtitle">X actions, without leaving Discord.</div>
+      <img class="logo" src="icons/icon128.png" alt="XCORD">
+      <div class="brand-copy">
+        <h1 class="brand-name">XCORD</h1>
+        <div class="tagline">X actions, directly from Discord.</div>
       </div>
     </header>
 
-    <div class="status">
-      <span class="status-dot"></span>
-      <span>Extension is enabled and ready.</span>
-    </div>
-
-    <section class="card">
-      <div class="row">
-        <div class="row-icon">
-          <svg viewBox="0 0 24 24"><path d="M15 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg>
-        </div>
-        <div>
-          <div class="row-title">Follow profiles</div>
-          <div class="row-copy">Profile links get a dedicated Follow button directly inside Discord.</div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="row-icon">
-          <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
-        </div>
-        <div>
-          <div class="row-title">Like posts</div>
-          <div class="row-copy">Post links get a separate Like button for one-click interaction.</div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="row-icon">
-          <svg viewBox="0 0 24 24"><path d="m17 1 4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="m7 23-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-        </div>
-        <div>
-          <div class="row-title">Repost separately</div>
-          <div class="row-copy">Repost is its own action, independent from Like.</div>
-        </div>
-      </div>
+    <section class="capabilities" aria-label="XCORD capabilities">
+      <div class="capability">Follow</div>
+      <div class="capability">Like</div>
+      <div class="capability">Repost</div>
+      <div class="capability">Raid</div>
     </section>
 
-    <p class="note">Keep X signed in on the same Chrome profile. Actions run in a temporary background tab and close automatically when finished.</p>
+    <section class="section">
+      <div class="preset-panel">
+        <div class="section-head">
+          <div class="section-title-wrap">
+            <h2 class="section-title">Raid Presets</h2>
+            <span class="section-index" id="presetCount">0/100</span>
+          </div>
+        </div>
+
+        <div class="editor">
+          <textarea id="raidPresets" spellcheck="true" placeholder="One reply preset per line..."></textarea>
+        </div>
+      </div>
+
+      <div class="meta-row">
+        <span class="random-label">
+          <span>Random every raid</span>
+        </span>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="savePresets" type="button">Save Presets</button>
+        <button class="secondary" id="resetPresets" type="button">Reset</button>
+      </div>
+      <div class="save-status" id="saveStatus" aria-live="polite"></div>
+    </section>
 
     <footer class="footer">
-      <span>X actions for Discord</span>
-      <span class="badge">v1.4.0</span>
+      <span class="footer-xcord">XCORD</span>
+      <span class="footer-xkatsura">XKATSURA</span>
+      <span class="footer-year">@2026</span>
     </footer>
   </main>
+  <script src="popup.js"></script>
 </body>
 </html>
